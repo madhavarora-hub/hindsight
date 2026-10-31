@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hindsight: a forecasting coach that remembers</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Hindsight</h1>
+      <p class="tag">Log a call. Sui settles it. Walrus Memory remembers who was right, and Hindsight coaches the next call.</p>
+    </div>
+    <div class="badges" id="badges"></div>
+  </header>
+
+  <section class="strip" id="live" aria-live="polite">Reading Sui mainnet…</section>
+
+  <main>
+    <section class="card" id="log-card">
+      <h2>Log a call</h2>
+      <form id="form">
+        <label>Who is calling? <input name="voice" required maxlength="40" placeholder="your name or an analyst" /></label>
+        <label>Market
+          <select name="kind">
+            <option value="sui_price">SUI price (Cetus USDC/SUI pool)</option>
+            <option value="gas_price">Sui reference gas price</option>
+            <option value="network_tx">Sui network transactions in the window</option>
+            <option value="balance">SUI balance of an address</option>
+          </select>
+        </label>
+        <label id="addr-row" hidden>Address <input name="address" placeholder="0x…" /></label>
+        <div class="row">
+          <label>Will be <select name="op"><option value=">">above</option><option value="<">below</option></select></label>
+          <label>Threshold <input name="threshold" type="number" step="any" required /></label>
+        </div>
+        <div class="row">
+          <label>Settles in <select name="window"><option value="3">3 min</option><option value="10">10 min</option><option value="60">1 hour</option><option value="1440">1 day</option></select></label>
+          <label>Your confidence YES <output id="p-out">70%</output><input name="p" type="range" min="1" max="99" value="70" /></label>
+        </div>
+        <label>Why (optional) <input name="note" maxlength="200" /></label>
+        <div id="coach" class="coach" aria-live="polite"></div>
+        <div class="row buttons">
+          <button type="submit" name="as" value="mine">Log my number</button>
+          <button type="submit" name="as" value="coached" id="coached-btn" disabled>Log Hindsight's number</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Open calls <button id="resolve" class="small">Settle due calls</button> <button id="bots" class="small">Run house bots (3 min)</button></h2>
+      <ul id="open" class="list"></ul>
+      <h2>Settled</h2>
+      <ul id="settled" class="list"></ul>
+    </section>
+
+    <section class="card">
+      <h2>Who to trust</h2>
+      <table id="voices"><thead><tr><th>Voice</th><th>Right</th><th>Said</th><th title="Brier skill vs always saying 50%">Skill</th><th>Verdict</th></tr></thead><tbody></tbody></table>
+      <h2>Calibration</h2>
+      <p class="muted">When a voice says X%, how often does it happen? Dots on the dashed line are honest.</p>
+      <div id="chart"></div>
+      <details><summary>Table view</summary><table id="buckets"><thead><tr><th>Stated</th><th>Calls</th><th>Came true</th></tr></thead><tbody></tbody></table></details>
+    </section>
+
+    <section class="card">
+      <h2>Lessons learned</h2>
+      <ul id="lessons" class="list"></ul>
+      <h2>Memory <span class="muted" id="mem-count"></span></h2>
+      <ul id="memories" class="list mem"></ul>
+    </section>
+  </main>
+
+  <section class="card wide" id="ledger-card" hidden>
+    <h2>Mainnet ledger <span class="muted" id="ledger-meta"></span></h2>
+    <p class="muted">A read-only export of the project's own Walrus Memory namespace on mainnet. Each line is one memory; the blob ID is where Walrus stores it (SEAL-encrypted).</p>
+    <ul id="ledger" class="list mem"></ul>
+  </section>
+
+  <footer>
+    Open source: <a href="https://github.com/madhavarora-hub/hindsight">github.com/madhavarora-hub/hindsight</a>.
+    Chain reads via Tatum Sui RPC (public Sui GraphQL as keyless fallback). Memory via Walrus Memory.
+  </footer>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

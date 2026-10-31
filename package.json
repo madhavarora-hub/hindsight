@@ -1,0 +1,17 @@
+{
+  "name": "hindsight",
+  "version": "0.1.0",
+  "description": "A forecasting coach that remembers. Calls settle on Sui mainnet via Tatum RPC; every call, result and lesson lives in Walrus Memory.",
+  "type": "module",
+  "license": "MIT",
+  "bin": { "hindsight": "node/cli.js" },
+  "scripts": {
+    "start": "node node/server.js",
+    "cli": "node node/cli.js",
+    "test": "node --test test/*.test.js"
+  },
+  "engines": { "node": ">=22.23.4" },
+  "dependencies": {
+    "@mysten-incubation/memwal": "^0.1.12"
+  }
+}
