@@ -8,6 +8,7 @@
   "scripts": {
     "start": "node node/server.js",
     "cli": "node node/cli.js",
+    "preflight": "node node/preflight.js",
     "test": "node --test test/*.test.js"
   },
   "engines": { "node": ">=22.23.4" },

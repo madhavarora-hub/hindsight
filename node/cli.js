@@ -8,6 +8,7 @@
 //   coach <voice> <kind> <p>   what the track record says about a draft call
 //   export                write web/ledger.json (public, read-only copy of the record)
 //   restore               ask the relayer to re-index this namespace from Walrus
+//   preflight [--write-test]  check .env, Tatum and Walrus auth before `loop` (read-only by default)
 
 import { writeFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -17,6 +18,10 @@ import { pct } from "../core/scoring.js";
 
 loadEnv();
 const [cmd = "state", ...args] = process.argv.slice(2);
+if (cmd === "preflight") {
+  const { main } = await import("./preflight.js");
+  process.exit(await main(args));
+}
 const engine = await makeEngine();
 const say = (...a) => console.log(...a);
 say(`memory: ${engine.store.name} | chain: ${engine.sui.name} | ${engine.log.length} memories loaded`);

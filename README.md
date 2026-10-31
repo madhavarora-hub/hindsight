@@ -63,7 +63,7 @@ Requires Node 22.23.4+.
 
 ```bash
 npm install
-npm test                 # 9 tests: codec, Cetus price math, settlement, learning loop, rebuild-from-memory, Tatum client
+npm test                 # 17 tests: codec, Cetus price math, settlement, learning loop, rebuild-from-memory, Tatum client, preflight
 npm start                # http://127.0.0.1:8787/web/
 ```
 
@@ -79,6 +79,14 @@ MEMWAL_ACCOUNT_ID=   # account id from the same dashboard
 TATUM_API_KEY=       # free key from https://dashboard.tatum.io
 ```
 
+Then check the setup before spending 20 minutes on the loop:
+
+```bash
+npm run preflight         # read-only: .env format, one Tatum Sui RPC call, Walrus Memory auth; PASS/FAIL with fixes
+```
+
+It never prints a secret (at most the last 4 characters), writes nothing and spends no gas. `npm run preflight -- --write-test` additionally stores one memory in a separate `hindsight-preflight` namespace. Exit code is 1 if any check fails.
+
 Then:
 
 ```bash
@@ -91,7 +99,7 @@ npm start
 ### CLI
 
 ```
-state | snapshot | bots [min] | resolve | loop [rounds] [min] | coach <voice> <kind> <p> | export | restore
+state | snapshot | bots [min] | resolve | loop [rounds] [min] | coach <voice> <kind> <p> | export | restore | preflight [--write-test]
 ```
 
 ## Layout
